@@ -9,6 +9,13 @@
 # as before, with a warning.
 SOCK=/var/run/tetragon/tetragon.sock
 
+# /var/run/tetragon is a host bind mount, so a socket left by the previous
+# container (a restart, or install.sh recreating it) is still there. It would
+# satisfy the wait below at once and take the ownership change, and tetragon
+# would then unlink it and listen on a fresh root:root socket. Remove it so
+# the wait only ends on the socket this tetragon creates.
+rm -f "$SOCK"
+
 # Wait for the socket with no deadline: loading the base sensor can take
 # well over the old 30s on a slow box, and giving up left the socket unusable
 # until the container restarted. The subshell dies with the container, since
