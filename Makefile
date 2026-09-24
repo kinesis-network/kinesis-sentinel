@@ -24,6 +24,7 @@ run:
 		--ipc=host \
 		--cgroupns=host \
 		--privileged \
+		-e SOCKET_GID=$(shell id -g) \
 		-v /sys/kernel/btf/vmlinux:/var/lib/tetragon/btf \
 		-v /sys/kernel/debug:/sys/kernel/debug \
 		-v /var/run/docker.sock:/var/run/docker.sock \
